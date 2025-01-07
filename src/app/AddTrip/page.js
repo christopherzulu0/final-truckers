@@ -4,15 +4,41 @@ import React,{useState,useEffect} from 'react'
 import NewTrip from '../../DriverBoardComponents/NewTrip'
 import {  getFirestore, collection, query, where, onSnapshot } from 'firebase/firestore';
 import { Center } from '@chakra-ui/react';
-import { User } from 'lucide-react';
+
+
 
 export default function Page() {
+  const [user, setUser] = useState(null);
   const [Drivers, setDrivers] = useState([]);
  
   const [isAuthorized, setIsAuthorized] = useState(false); // State to track authorization
 
+    {/**Get user details */}
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          const response = await fetch('/api/user');
+          if (response.ok) {
+            const data = await response.json();
+            setUser(data.user);
+          } else if (response.status === 401) {
+            console.warn('User is not authorized. Session might have expired.');
+            // Handle unauthorized case here, e.g., redirect to login
+          } else {
+            console.error('Failed to fetch user:', response.status);
+          }
+        } catch (error) {
+          console.error('An error occurred while fetching user:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+    
+      fetchUser();
+    }, []); 
+
   useEffect(() => {
-    if (!User?.uid) {
+    if (!user?.uid) {
       console.error('User ID is not available');
       return;
     }
@@ -20,7 +46,7 @@ export default function Page() {
     const db = getFirestore();
     const writersCollection = collection(db, 'Drivers');
     const q = query(writersCollection,
-      where('UID', '==', User.uid),
+      where('UID', '==', user.uid),
       where('Status', '==', 'Approved')
       );
 
@@ -46,7 +72,7 @@ export default function Page() {
     };
   }, [User]);
 
-  if (!User) {
+  if (!user) {
     return <Center height="100vh">
     <button
       disabled

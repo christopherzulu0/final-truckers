@@ -199,62 +199,60 @@ export default function DispatcherApprove({Dispatchers}) {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {drafted?.map((pending)=>(
-                        <TableRow className="bg-accent">
-                          <TableCell>
-                            <div className="font-medium">{pending?.Name}</div>
-                            
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                          {pending?.Experience}
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Badge className="text-xs" variant="secondary">
-                            {pending?.Status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                          <Link href={`${pending?.Cv}`}>
-                          <Badge className="text-xs" variant="secondary">
-                          View CV
-                          </Badge>
-                          </Link>
-                          
-                          </TableCell>
-                          <TableCell >{pending?.Approved}</TableCell>
-                          <TableCell >
-                          <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                            disabled={loading}
-                          >
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem
-                            onClick={() => handleApproval(pending.id, 'Approved')}
-                            disabled={loading}
-                          >
-                            Approve
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => handleApproval(pending.id, 'Rejected')}
-                            disabled={loading}
-                          >
-                            Reject
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                    ))}
-                      </TableBody>
+  {drafted?.map((pending) => (
+    <TableRow key={pending.id} className="bg-accent"> {/* Add key prop here */}
+      <TableCell>
+        <div className="font-medium">{pending?.Name}</div>
+      </TableCell>
+      <TableCell className="hidden sm:table-cell">
+        {pending?.Experience}
+      </TableCell>
+      <TableCell className="hidden sm:table-cell">
+        <Badge className="text-xs" variant="secondary">
+          {pending?.Status}
+        </Badge>
+      </TableCell>
+      <TableCell className="hidden md:table-cell">
+        <Link href={`${pending?.Cv}`}>
+          <Badge className="text-xs" variant="secondary">
+            View CV
+          </Badge>
+        </Link>
+      </TableCell>
+      <TableCell>{pending?.Approved}</TableCell>
+      <TableCell>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              aria-haspopup="true"
+              size="icon"
+              variant="ghost"
+              disabled={loading}
+            >
+              <MoreHorizontal className="h-4 w-4" />
+              <span className="sr-only">Toggle menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => handleApproval(pending.id, 'Approved')}
+              disabled={loading}
+            >
+              Approve
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => handleApproval(pending.id, 'Rejected')}
+              disabled={loading}
+            >
+              Reject
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
                     </Table>
                   </CardContent>
                 </Card>

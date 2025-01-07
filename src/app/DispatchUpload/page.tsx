@@ -5,7 +5,7 @@ import { getFirestore, collection, addDoc, query, where, onSnapshot, serverTimes
 
 import { Button } from '../../components/ui/button';
 import { Center } from '@chakra-ui/react';
-import { Spinner } from 'flowbite-react';
+import { Spinner, Toast } from 'flowbite-react';
 import { auth, firestore } from "../../firebase/clientApp";
 import { useRouter } from 'next/navigation';
 
@@ -112,78 +112,78 @@ export default function Page() {
     }
   };
 
-  const sendPost = async () => {
-    if (loading) return;
-    if (!user) {
-      console.error("User is not authenticated");
-      return;
-    }
+  // const sendPost = async () => {
+  //   if (loading) return;
+  //   if (!user) {
+  //     console.error("User is not authenticated");
+  //     return;
+  //   }
 
-    setLoading(true);
+  //   setLoading(true);
 
-    try {
-      const db = getFirestore();
-      const dispatchersRef = collection(db, 'Dispatchers');
-      const q = query(dispatchersRef, where('UID', '==', user?.id));
-      const snapshot = await getDocs(q);
+  //   try {
+  //     const db = getFirestore();
+  //     const dispatchersRef = collection(db, 'Dispatchers');
+  //     const q = query(dispatchersRef, where('UID', '==', user?.id));
+  //     const snapshot = await getDocs(q);
 
-      if (snapshot.empty) {
-        console.error("No matching dispatcher found");
-        setLoading(false);
-        return;
-      }
+  //     if (snapshot.empty) {
+  //       console.error("No matching dispatcher found");
+  //       setLoading(false);
+  //       return;
+  //     }
 
-      const dispatcherDoc = snapshot.docs[0];
-      const dispatcherId = dispatcherDoc.id;
+  //     const dispatcherDoc = snapshot.docs[0];
+  //     const dispatcherId = dispatcherDoc.id;
 
-      await addDoc(
-        collection(
-          firestore,
-          'Dispatchers', dispatcherId, 'Dispatches'
-        ),
-        {
-          DriverID:ID,
-          DriverName: DriverName,
-          Email: Email,
-          ArrivalTime: ArrivalTime,
-          Destination: Destination,
-          CargoName: CargoName,
-          PhoneNumber: PhoneNumber,
-          AssignedArea: AssignedArea,
-          LicensePlate:LicensePlate,
-          VehicleName:VehicleName,
-          Role:Role,
-          Company:Company,
-          Status: 'Pending',
-          timestamp: serverTimestamp(),
-        }
-      );
+  //     await addDoc(
+  //       collection(
+  //         firestore,
+  //         'Dispatchers', dispatcherId, 'Dispatches'
+  //       ),
+  //       {
+  //         DriverID:ID,
+  //         DriverName: DriverName,
+  //         Email: Email,
+  //         ArrivalTime: ArrivalTime,
+  //         Destination: Destination,
+  //         CargoName: CargoName,
+  //         PhoneNumber: PhoneNumber,
+  //         AssignedArea: AssignedArea,
+  //         LicensePlate:LicensePlate,
+  //         VehicleName:VehicleName,
+  //         Role:Role,
+  //         Company:Company,
+  //         Status: 'Pending',
+  //         timestamp: serverTimestamp(),
+  //       }
+  //     );
 
     
-      setDriverName("");
-      setEmail("");
-      setArrivalTime("");
-      setDestination("");
-      setCargoName("");
-      setPhoneNumber("");
-      setAssignedArea("");
-      router.push('/DispatcherAdmin');
-    } catch (error) {
-      console.error('Error adding document: ', error);
-      setToastMessage('Error Assigning Route');
-      setToastVisible(true);
-    } finally {
-      setLoading(false);
-      setToastMessage(`Dispatch Assigned to ${DriverName}.`);
-      setToastVisible(true);
+  //     setDriverName("");
+  //     setEmail("");
+  //     setArrivalTime("");
+  //     setDestination("");
+  //     setCargoName("");
+  //     setPhoneNumber("");
+  //     setAssignedArea("");
+  //     router.push('/DispatcherAdmin');
+  //   } catch (error) {
+  //     console.error('Error adding document: ', error);
+  //     setToastMessage('Error Assigning Route');
+  //     setToastVisible(true);
+  //   } finally {
+  //     setLoading(false);
+  //     setToastMessage(`Dispatch Assigned to ${DriverName}.`);
+  //     setToastVisible(true);
   
-      // Hide toast after 3 seconds
-      setTimeout(() => {
-        setToastVisible(false);
-      }, 3000);
-    }
-    }
-  };
+  //     // Hide toast after 3 seconds
+  //     setTimeout(() => {
+  //       setToastVisible(false);
+  //     }, 3000);
+  //   }
+  //   }
+  // };
 
 
   
@@ -220,7 +220,9 @@ export default function Page() {
   }, [user]);
 
   if (!user) {
-    return<Center height="100vh">
+    return(
+<>
+<Center height="100vh">
     <button
       disabled
       type="button"
@@ -245,11 +247,15 @@ export default function Page() {
       </svg>
       Checking Dispatcher Info ...
     </button>
-  </Center>; 
+  </Center>
+</>
+  
+    ) 
   }
 
   if (!isAuthorized) {
     return (
+    <>
       <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
         <div className="relative p-4 w-full max-w-md h-full md:h-auto mx-auto">
           <div className="relative p-6 text-center bg-white rounded-lg shadow-lg dark:bg-gray-800 sm:p-8">
@@ -260,6 +266,7 @@ export default function Page() {
           </div>
         </div>
       </div>
+    </>
     );
   }
 

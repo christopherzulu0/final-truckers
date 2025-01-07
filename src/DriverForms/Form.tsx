@@ -1,6 +1,6 @@
 'use client'
 
-import React,{useEffect, useState} from 'react'
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
@@ -49,7 +49,9 @@ import { Progress, Spinner } from "flowbite-react"
 import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore"
 import { auth, firestore, storage } from "../firebase/clientApp"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
-import { Separator } from '@radix-ui/react-select';
+import { Separator } from '@/components/ui/separator'
+import { useEffect, useState } from "react"
+
 
 
 interface User {
@@ -416,7 +418,7 @@ export default function Form() {
                 What is Ice-Road Experience?
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 text-sm text-muted-foreground ">
-                Ice-Road Experience refers to the driver's familiarity and skill in navigating roads covered in ice,
+                Ice-Road Experience refers to the drivers familiarity and skill in navigating roads covered in ice,
                 often found in extreme cold climates. This experience is valuable for certain trucking routes.
               </CollapsibleContent>
             </Collapsible>
